@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace webapi_c.Models
 {
     [Table("Despesa")]
     public class Despesa
     {
+        [Key]
         [Column("Id")]
         [Display(Name = "Código")]
         public int Id { get; set; }
@@ -20,7 +22,7 @@ namespace webapi_c.Models
 
         [Column("Data")]
         [Display(Name = "Data")]
-        public DateTime Data { get; set; }
+        [DataType(DataType.Date)] // Especifica que o tipo de dado esperado é apenas a data
+        public DateTime Data { get; set; } // Armazena apenas a data, sem a hora
     }
 }
-
