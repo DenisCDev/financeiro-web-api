@@ -17,7 +17,7 @@ namespace webapi_c.Models
 
         [Column("Valor")]
         [Display(Name = "Valor")]
-        public decimal Valor { get; set; }
+        public double Valor { get; set; }
 
         private DateTime _data;
 
