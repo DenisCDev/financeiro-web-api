@@ -152,5 +152,39 @@ namespace webapi_c.Controllers
         {
             return _context.Despesas.Any(e => e.Id == id);
         }
+
+        // Método para gerar relatório de despesas por período
+        public async Task<IActionResult> RelatorioDespesasPorPeriodo(DateTime inicio, DateTime fim)
+        {
+            var despesas = await _context.Despesas
+                                .Where(d => d.Data >= inicio && d.Data <= fim)
+                                .ToListAsync();
+
+            return View(despesas);
+        }
+
+        // Action para gerar relatório de despesas por período
+        public async Task<IActionResult> RelatorioDespesasPorPeriodo()
+        {
+            var inicio = DateTime.Today.AddMonths(-1); // Um mês atrás
+            var fim = DateTime.Today; // Hoje
+            var despesas = await _context.Despesas
+                                .Where(d => d.Data >= inicio && d.Data <= fim)
+                                .ToListAsync();
+
+            return View("RelatorioDespesas", despesas);
+        }
+
+        // Método para obter despesas por mês
+        public async Task<IActionResult> DespesasPorMes()
+        {
+            var despesasPorMes = await _context.Despesas
+                .GroupBy(d => new { d.Data.Year, d.Data.Month })
+                .Select(g => new { Ano = g.Key.Year, Mês = g.Key.Month, Total = g.Sum(d => d.Valor) })
+                .ToListAsync();
+
+            return Json(despesasPorMes);
+        }
+
     }
 }

@@ -152,5 +152,38 @@ namespace webapi_c.Controllers
         {
             return _context.Receitas.Any(e => e.Id == id);
         }
+
+        // Método para gerar relatório de receitas por período
+        public async Task<IActionResult> RelatorioReceitasPorPeriodo(DateTime inicio, DateTime fim)
+        {
+            var receitas = await _context.Receitas
+                                .Where(r => r.Data >= inicio && r.Data <= fim)
+                                .ToListAsync();
+
+            return View(receitas);
+        }
+
+        // Action para gerar relatório de receitas por período
+        public async Task<IActionResult> RelatorioReceitasPorPeriodo()
+        {
+            var inicio = DateTime.Today.AddMonths(-1); // Um mês atrás
+            var fim = DateTime.Today; // Hoje
+            var receitas = await _context.Receitas
+                                .Where(r => r.Data >= inicio && r.Data <= fim)
+                                .ToListAsync();
+
+            return View("RelatorioReceitas", receitas);
+        }
+
+        // Método para obter receitas por mês
+        public async Task<IActionResult> ReceitasPorMes()
+        {
+            var receitasPorMes = await _context.Receitas
+                .GroupBy(r => new { r.Data.Year, r.Data.Month })
+                .Select(g => new { Ano = g.Key.Year, Mês = g.Key.Month, Total = g.Sum(r => r.Valor) })
+                .ToListAsync();
+
+            return Json(receitasPorMes);
+        }
     }
 }

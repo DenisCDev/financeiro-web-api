@@ -1,8 +1,135 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Bem vindo(a)</h1>
-    <p>Uma API sobre cadastro de finanças em C#</p>
+<canvas id="despesasPorMesChart" width="400" height="200"></canvas>
+<canvas id="receitasPorMesChart" width="400" height="200"></canvas>
+<canvas id="saldoLiquidoPorMesChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Função para buscar dados de receitas por mês do controller
+    fetch('@Url.Action("ReceitasPorMes", "Receitas")')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados de receitas por mês');
+            }
+            return response.json();
+        })
+        .then(receitasData => {
+            const receitasPorMesData = receitasData.map(item => item.Total);
+            const meses = receitasData.map(item => `${item.Mês}/${item.Ano}`);
+
+            const ctx = document.getElementById('receitasPorMesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: meses,
+                    datasets: [{
+                        label: 'Receitas por Mês',
+                        data: receitasPorMesData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados de receitas por mês:', error);
+            const ctx = document.getElementById('receitasPorMesChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'red';
+            ctx.textAlign = 'center';
+            ctx.fillText('Dados de receitas indisponíveis', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        });
+
+    // Função para buscar dados de despesas por mês do controller
+    fetch('@Url.Action("DespesasPorMes", "Despesas")')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados de despesas por mês');
+            }
+            return response.json();
+        })
+        .then(despesasData => {
+            const despesasPorMesData = despesasData.map(item => item.Total);
+            const meses = despesasData.map(item => `${item.Mês}/${item.Ano}`);
+
+            const ctx = document.getElementById('despesasPorMesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: meses,
+                    datasets: [{
+                        label: 'Despesas por Mês',
+                        data: despesasPorMesData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao obter dados de despesas por mês:', error);
+            const ctx = document.getElementById('despesasPorMesChart').getContext('2d');
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'red';
+            ctx.textAlign = 'center';
+            ctx.fillText('Dados de despesas indisponíveis', ctx.canvas.width / 2, ctx.canvas.height / 2);
+        });
+</script>
+
+<div style="text-align: center;">
+    <input type="date" id="dataSelecionada" style="padding: 10px; font-size: 16px; border-radius: 10px; border: 2px solid #4CAF50;">
+    <br><br>
+    <button onclick="verificarDataEGerarRelatorio()" style="background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;">
+        Gerar Relatório de Despesas e Receitas
+    </button>
 </div>
+
+<script>
+    function verificarDataEGerarRelatorio() {
+
+        var dataSelecionada = document.getElementById("dataSelecionada").value;
+
+        if (!dataSelecionada) {
+            alert("Por favor, selecione uma data antes de gerar o relatório.");
+            return; 
+        }
+
+        gerarRelatorio();
+    }
+
+    function gerarRelatorio() {
+        // Ainda em desenvolvimento
+    }
+</script>
