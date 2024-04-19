@@ -32,8 +32,7 @@ namespace webapi_c.Controllers
                 return NotFound();
             }
 
-            var receita = await _context.Receitas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receita = await _context.Receitas.FirstOrDefaultAsync(m => m.Id == id);
             if (receita == null)
             {
                 return NotFound();
@@ -49,8 +48,6 @@ namespace webapi_c.Controllers
         }
 
         // POST: Receitas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,Valor,Data")] Receita receita)
@@ -81,8 +78,6 @@ namespace webapi_c.Controllers
         }
 
         // POST: Receitas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Valor,Data")] Receita receita)
@@ -123,8 +118,7 @@ namespace webapi_c.Controllers
                 return NotFound();
             }
 
-            var receita = await _context.Receitas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var receita = await _context.Receitas.FirstOrDefaultAsync(m => m.Id == id);
             if (receita == null)
             {
                 return NotFound();
@@ -151,28 +145,6 @@ namespace webapi_c.Controllers
         private bool ReceitaExists(int id)
         {
             return _context.Receitas.Any(e => e.Id == id);
-        }
-
-        // Método para gerar relatório de receitas por período
-        public async Task<IActionResult> RelatorioReceitasPorPeriodo(DateTime inicio, DateTime fim)
-        {
-            var receitas = await _context.Receitas
-                                .Where(r => r.Data >= inicio && r.Data <= fim)
-                                .ToListAsync();
-
-            return View(receitas);
-        }
-
-        // Action para gerar relatório de receitas por período
-        public async Task<IActionResult> RelatorioReceitasPorPeriodo()
-        {
-            var inicio = DateTime.Today.AddMonths(-1); // Um mês atrás
-            var fim = DateTime.Today; // Hoje
-            var receitas = await _context.Receitas
-                                .Where(r => r.Data >= inicio && r.Data <= fim)
-                                .ToListAsync();
-
-            return View("RelatorioReceitas", receitas);
         }
 
         // Método para obter receitas por mês

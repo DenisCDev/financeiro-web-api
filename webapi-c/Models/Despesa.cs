@@ -7,6 +7,7 @@ namespace webapi_c.Models
     [Table("Despesa")]
     public class Despesa
     {
+        [Key]
         [Column("Id")]
         [Display(Name = "Código")]
         public int Id { get; set; }

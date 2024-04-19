@@ -32,8 +32,7 @@ namespace webapi_c.Controllers
                 return NotFound();
             }
 
-            var despesa = await _context.Despesas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var despesa = await _context.Despesas.FirstOrDefaultAsync(m => m.Id == id);
             if (despesa == null)
             {
                 return NotFound();
@@ -49,8 +48,6 @@ namespace webapi_c.Controllers
         }
 
         // POST: Despesas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,Valor,Data")] Despesa despesa)
@@ -81,8 +78,6 @@ namespace webapi_c.Controllers
         }
 
         // POST: Despesas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Valor,Data")] Despesa despesa)
@@ -123,8 +118,7 @@ namespace webapi_c.Controllers
                 return NotFound();
             }
 
-            var despesa = await _context.Despesas
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var despesa = await _context.Despesas.FirstOrDefaultAsync(m => m.Id == id);
             if (despesa == null)
             {
                 return NotFound();
@@ -151,28 +145,6 @@ namespace webapi_c.Controllers
         private bool DespesaExists(int id)
         {
             return _context.Despesas.Any(e => e.Id == id);
-        }
-
-        // Método para gerar relatório de despesas por período
-        public async Task<IActionResult> RelatorioDespesasPorPeriodo(DateTime inicio, DateTime fim)
-        {
-            var despesas = await _context.Despesas
-                                .Where(d => d.Data >= inicio && d.Data <= fim)
-                                .ToListAsync();
-
-            return View(despesas);
-        }
-
-        // Action para gerar relatório de despesas por período
-        public async Task<IActionResult> RelatorioDespesasPorPeriodo()
-        {
-            var inicio = DateTime.Today.AddMonths(-1); // Um mês atrás
-            var fim = DateTime.Today; // Hoje
-            var despesas = await _context.Despesas
-                                .Where(d => d.Data >= inicio && d.Data <= fim)
-                                .ToListAsync();
-
-            return View("RelatorioDespesas", despesas);
         }
 
         // Método para obter despesas por mês
