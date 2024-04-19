@@ -18,8 +18,8 @@ Esta é uma API Web desenvolvida em C# utilizando o framework .NET, Entity Frame
 - Biblioteca de Gráficos: Chart.js
 
 ## Requisitos
-Visual Studio 2022
-PostgreSQL4
+- Visual Studio 2022
+- PostgreSQL4 <br>
 (Recomendando rodar no edge ao executar código)
 
 ## Configuração
